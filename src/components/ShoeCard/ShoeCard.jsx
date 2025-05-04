@@ -31,19 +31,27 @@ const ShoeCard = ({
       ? 'new-release'
       : 'default'
 
+  const textVariant = variant === 'on-sale'
+    ? 'Sale'
+    : variant === 'new-release'
+      ? 'Just Released'
+      : null;
+
   return (
     <Link href={`/shoe/${slug}`}>
       <Wrapper>
         <ImageWrapper>
           <Image alt="" src={imageSrc} />
+          {textVariant && <Ribbon variant={variant}>{textVariant}</Ribbon>}
         </ImageWrapper>
         <Spacer size={12} />
         <Row>
           <Name>{name}</Name>
-          <Price>{formatPrice(price)}</Price>
+          <Price variant={variant}>{formatPrice(price)}</Price>
         </Row>
         <Row>
           <ColorInfo>{pluralize('Color', numOfColors)}</ColorInfo>
+          {salePrice && <SalePrice>{formatPrice(salePrice)}</SalePrice>}
         </Row>
       </Wrapper>
     </Link>
@@ -61,10 +69,29 @@ const ImageWrapper = styled.div`
   position: relative;
 `;
 
-const Image = styled.img``;
+const Image = styled.img`
+  width: 100%;
+`;
+
+const Ribbon = styled.div`
+  position: absolute;
+  top: 12px;
+  right: -4px;
+  padding: 8px;
+  border-radius: 2px;
+
+  background-color: ${p => (
+    p.variant === 'on-sale'
+      ? COLORS.primary
+      : COLORS.secondary
+  )};
+  color: ${COLORS.white};
+`;
 
 const Row = styled.div`
   font-size: 1rem;
+  display: flex;
+  justify-content: space-between;
 `;
 
 const Name = styled.h3`
@@ -72,7 +99,9 @@ const Name = styled.h3`
   color: ${COLORS.gray[900]};
 `;
 
-const Price = styled.span``;
+const Price = styled.span`
+  ${p => p.variant === 'on-sale' && `text-decoration: line-through;`}
+`;
 
 const ColorInfo = styled.p`
   color: ${COLORS.gray[700]};

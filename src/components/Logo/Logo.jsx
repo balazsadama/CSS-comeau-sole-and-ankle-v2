@@ -21,4 +21,4 @@ const Wrapper = styled.h1`
   font-weight: ${WEIGHTS.bold};
 `;
 
-export default Logo;
+export default styled(Logo)``;
